@@ -4,9 +4,9 @@
 
 running with a script
 
-`esses_cmd test.mes`
+`esses_cmd test.es`
 
 continue running after script has completed (interactive mode)
 
-`esses_cmd -i test.mes`
+`esses_cmd -i test.es`
 
