@@ -5,8 +5,8 @@ use esses_lib_q::parallelruntime::ParallelRuntimeBuilder;
 use esses_lib_q::scriptloader::FileScriptLoader;
 use log::error;
 use log::trace;
-use std::{fs, io};
 use quickjs_es_runtime::esscript::EsScript;
+use std::{fs, io};
 
 fn main() {
     simple_logger::init_with_level(log::Level::Info).unwrap();
@@ -26,7 +26,8 @@ fn main() {
             if read_res.is_ok() {
                 let contents = read_res.ok().unwrap();
                 trace!("evalling: {}", contents);
-                let res = prt.eval_sync(EsScript::new(file_name_string.as_str(), contents.as_str()));
+                let res =
+                    prt.eval_sync(EsScript::new(file_name_string.as_str(), contents.as_str()));
                 if res.is_err() {
                     error!("error in eval: {}", res.err().unwrap());
                 }
@@ -39,11 +40,27 @@ fn main() {
     }
 
     if flags.contains(&"i".to_string()) {
-        println!("press enter to exit ESsesCmd...");
-        let mut input = String::new();
-        match io::stdin().read_line(&mut input) {
-            Ok(_n) => {}
-            Err(error) => println!("error: {}", error),
+        println!("type exit to exit ESsesCmd-q...");
+        loop {
+            let mut input = String::new();
+            match io::stdin().read_line(&mut input) {
+                Ok(_len) => {
+                    if input.trim().eq("exit") {
+                        break;
+                    } else {
+                        let res = prt.eval_sync(EsScript::new("input.es", input.as_str()));
+                        match res {
+                            Ok(esvf) => {
+                                println!("{:?}", esvf);
+                            }
+                            Err(e) => {
+                                println!("{}", e);
+                            }
+                        }
+                    }
+                }
+                Err(error) => println!("error: {}", error),
+            }
         }
     }
 }
