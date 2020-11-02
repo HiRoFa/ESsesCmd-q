@@ -1,16 +1,17 @@
 [package]
-name = "esses_cmd"
+name = "essescmd_q"
 version = "0.1.0"
-authors = ["Andries Hiemstra <andries@fam-hiemstra.nl>"]
+authors = ["Andries Hiemstra <os@hirofa.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 
-esses_lib_q =  { git = 'https://github.com/HiRoFa/ESsesLib-q?14', branch="main", features = ["all"]}
-quickjs_es_runtime = { git = 'https:///github.com/HiRoFa/quickjs_es_runtime'}
+esses_lib_q =  { git = 'https://github.com/HiRoFa/ESsesLib-q', branch="main", features = ["all"]}
+quickjs_es_runtime = { git = 'https://github.com/HiRoFa/quickjs_es_runtime'}
 
 log = "0.4"
 simple_logger = "1.3.0"
 cmdparser = "0.2.0"
+rustyline = "6.3.0"

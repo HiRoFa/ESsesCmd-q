@@ -1,11 +1,13 @@
 extern crate cmdparser;
 
 use cmdparser::Parser;
-use esses_lib_q::parallelruntime::ParallelRuntimeBuilder;
+use esses_lib_q::parallelruntime::{ParallelRuntime, ParallelRuntimeBuilder};
 use esses_lib_q::scriptloader::FileScriptLoader;
 use log::error;
 use log::trace;
 use quickjs_es_runtime::esscript::EsScript;
+use rustyline::error::ReadlineError;
+use rustyline::Editor;
 use std::{fs, io};
 
 fn main() {
@@ -40,29 +42,49 @@ fn main() {
     }
 
     if flags.contains(&"i".to_string()) {
-        println!("type exit to exit ESsesCmd-q...");
-        loop {
-            let mut input = String::new();
-            match io::stdin().read_line(&mut input) {
-                Ok(_len) => {
-                    if input.trim().eq("exit") {
-                        break;
-                    } else {
-                        let res = prt.eval_sync(EsScript::new("input.es", input.as_str()));
-                        match res {
-                            Ok(esvf) => {
-                                println!("{:?}", esvf);
-                            }
-                            Err(e) => {
-                                println!("{}", e);
-                            }
-                        }
+        interactive_mode(&prt);
+    }
+}
+
+fn interactive_mode(prt: &ParallelRuntime) {
+    println!("press CTRL-D or CTRL-C to exit ESsesCmd-q...");
+
+    let mut rl = Editor::<()>::new();
+    if rl.load_history("history.txt").is_err() {
+        // println!("No previous history.");
+    }
+
+    loop {
+        let readline = rl.readline(">> ");
+        match readline {
+            Ok(line) => {
+                rl.add_history_entry(line.as_str());
+
+                let res = prt.eval_sync(EsScript::new("input.es", line.as_str()));
+                match res {
+                    Ok(esvf) => {
+                        println!("{:?}", esvf);
+                    }
+                    Err(e) => {
+                        println!("{}", e);
                     }
                 }
-                Err(error) => println!("error: {}", error),
+            }
+            Err(ReadlineError::Interrupted) => {
+                println!("CTRL-C");
+                break;
+            }
+            Err(ReadlineError::Eof) => {
+                println!("CTRL-D");
+                break;
+            }
+            Err(err) => {
+                println!("Error: {:?}", err);
+                break;
             }
         }
     }
+    rl.save_history("history.txt").unwrap();
 }
 
 #[cfg(test)]
