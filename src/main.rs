@@ -2,21 +2,25 @@ extern crate cmdparser;
 
 use cmdparser::Parser;
 use esses_lib_q::parallelruntime::{ParallelRuntime, ParallelRuntimeBuilder};
-use esses_lib_q::scriptloader::FileScriptLoader;
+use esses_lib_q::scriptloader::*;
 use log::error;
 use log::trace;
 use quickjs_es_runtime::esscript::EsScript;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
-use std::{fs, io};
+use std::fs;
 
 fn main() {
     simple_logger::init_with_level(log::Level::Info).unwrap();
     //simple_logger::init().unwrap();
 
+    let m_loader = MultiScriptLoader::new()
+        .add(FileScriptLoader::new("./scripts"))
+        .add(WebScriptLoader::new());
+
     let prt = ParallelRuntimeBuilder::new()
         .thread_count(1)
-        .script_loader(FileScriptLoader::new("./scripts"))
+        .script_loader(m_loader)
         .build();
 
     let (arguments, flags) = Parser::new().merge_values(true).parse();
