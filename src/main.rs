@@ -22,6 +22,7 @@ fn main() {
     } else {
         simple_logger::SimpleLogger::new()
             .with_level(LevelFilter::Info)
+            .with_module_level("ureq::unit", LevelFilter::Error)
             .init()
             .unwrap();
     }
