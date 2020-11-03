@@ -3,16 +3,28 @@ extern crate cmdparser;
 use cmdparser::Parser;
 use esses_lib_q::parallelruntime::{ParallelRuntime, ParallelRuntimeBuilder};
 use esses_lib_q::scriptloader::*;
-use log::error;
 use log::trace;
+use log::{error, LevelFilter};
 use quickjs_es_runtime::esscript::EsScript;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 use std::fs;
 
 fn main() {
-    simple_logger::init_with_level(log::Level::Info).unwrap();
     //simple_logger::init().unwrap();
+    let (arguments, flags) = Parser::new().merge_values(true).parse();
+
+    if flags.contains(&"v".to_string()) {
+        simple_logger::SimpleLogger::new()
+            .with_level(LevelFilter::Trace)
+            .init()
+            .unwrap();
+    } else {
+        simple_logger::SimpleLogger::new()
+            .with_level(LevelFilter::Info)
+            .init()
+            .unwrap();
+    }
 
     let m_loader = MultiScriptLoader::new()
         .add(FileScriptLoader::new("./scripts"))
@@ -22,8 +34,6 @@ fn main() {
         .thread_count(1)
         .script_loader(m_loader)
         .build();
-
-    let (arguments, flags) = Parser::new().merge_values(true).parse();
 
     let f_opt = arguments.get("f");
     if let Some(f) = f_opt {
