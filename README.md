@@ -17,3 +17,7 @@ continue running after script has completed (interactive mode)
 or without using a file
 
 ```essescmd_q -i'```
+
+verbose mode
+
+```essescmd_q -v'```
