@@ -1,7 +1,7 @@
 {
     async function test_gpio() {
         console.log('init pins');
-        let pin_set = await esses..io.gpio.PinSet.init('/dev/gpiochip0', 'out', [1, 2, 3, 4]);
+        let pin_set = await esses.io.gpio.PinSet.init('/dev/gpiochip0', 'out', [1, 2, 3, 4]);
         console.log('setting states to 1');
         await pin_set.setState([1, 1, 1, 1]);
         setTimeout(() => {
