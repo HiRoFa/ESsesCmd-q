@@ -42,11 +42,11 @@ fn main() {
             let read_res = fs::read_to_string(&file_name_string);
             if read_res.is_ok() {
                 let contents = read_res.ok().unwrap();
-                trace!("evalling: {}", contents);
+                trace!("evaluating: {}", contents);
                 let res =
-                    prt.eval_sync(EsScript::new(file_name_string.as_str(), contents.as_str()));
+                    prt.eval_module_sync(EsScript::new(file_name_string.as_str(), contents.as_str()));
                 if res.is_err() {
-                    error!("error in eval: {}", res.err().unwrap());
+                    error!("error in eval_module_sync: {}", res.err().unwrap());
                 }
             } else {
                 error!("could not read file {}", read_res.err().unwrap());
