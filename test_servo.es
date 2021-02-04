@@ -8,8 +8,7 @@ async function test(){
 
     let servo = await servoMod.Servo.init('/dev/gpiochip0', 12, duration, left, neutral, right);
 
-    // this waits for it to turn on, no longer
-    await servo.softPwm(100, 50);
+    servo.softPwm(100, 50);
 
     setTimeout(() => {
         console.log("going off");
