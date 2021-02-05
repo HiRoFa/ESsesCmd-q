@@ -1,23 +1,20 @@
 async function test(){
     let servoMod = await import('https://raw.githubusercontent.com/HiRoFa/ESsesLib-q/main/modules/io/gpio/servo.mes');
 
-    let duration = 110;
-    let left = 10;
-    let neutral = 50;
-    let right = 90;
+    let frequency = 50;
+    let left = 5;
+    let neutral = 7.5;
+    let right = 10;
 
-    let servo = await servoMod.Servo.init('/dev/gpiochip0', 12, duration, left, neutral, right);
+    let servo = await servoMod.Servo.init('/dev/gpiochip0', 12, frequency, left, neutral, right);
 
-    servo.softPwm(20, 1);
+    await servo.left();
+    await servo.right();
+    await servo.left();
+    await servo.right();
+    await servo.neutral();
 
-    setTimeout(() => {
-	servo.softPwm(20,2);    
-    }, 2000);
-
-    setTimeout(() => {
-        console.log("going off");
-        servo.off();
-    }, 4000);
+    await servo.off();
 
 };
 
