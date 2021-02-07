@@ -5,7 +5,7 @@ use esses_lib_q::parallelruntime::{ParallelRuntime, ParallelRuntimeBuilder};
 use esses_lib_q::scriptloader::*;
 use log::trace;
 use log::{error, LevelFilter};
-use quickjs_es_runtime::esscript::EsScript;
+use quickjs_runtime::esscript::EsScript;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 use std::fs;
