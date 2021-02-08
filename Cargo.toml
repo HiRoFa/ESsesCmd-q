@@ -10,7 +10,8 @@ edition = "2018"
 
 esses_lib_q =  { git = 'https://github.com/HiRoFa/ESsesLib-q', branch="main", features = ["all"]}
 # esses_lib_q =  { path = '../ESsesLib-q', features = ["all"]}
-quickjs_runtime = "0.1.0"
+#quickjs_runtime = "0.1.0"
+quickjs_runtime = { git = 'https://github.com/HiRoFa/quickjs_es_runtime' }
 
 log = "0.4"
 simple_logger = "1.3.0"
